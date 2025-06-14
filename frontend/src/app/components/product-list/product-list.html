@@ -1,0 +1,60 @@
+<h2>Liste des produits</h2>
+
+<div class="form-container">
+  <form (ngSubmit)="addProduct()" #productForm="ngForm">
+    <input
+      type="text"
+      name="name"
+      [(ngModel)]="newProduct.name"
+      placeholder="Nom du produit"
+      required
+    />
+    <input
+      type="number"
+      name="price"
+      [(ngModel)]="newProduct.price"
+      placeholder="Prix (FCFA)"
+      required
+    />
+    <button type="submit" [disabled]="productForm.invalid">Ajouter</button>
+  </form>
+</div>
+
+
+<div class="table-wrapper">
+  <table class="product-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prix (FCFA)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.id }}</td>
+
+        <!-- Lecture -->
+        <td *ngIf="editProductId !== product.id">{{ product.name }}</td>
+        <td *ngIf="editProductId !== product.id">{{ product.price }} FCFA</td>
+
+        <!-- Édition -->
+        <td *ngIf="editProductId === product.id">
+          <input type="text" [(ngModel)]="editedProduct.name" name="editName{{product.id}}" required />
+        </td>
+        <td *ngIf="editProductId === product.id">
+          <input type="number" [(ngModel)]="editedProduct.price" name="editPrice{{product.id}}" required />
+        </td>
+
+        <!-- Actions -->
+        <td>
+          <button *ngIf="editProductId !== product.id" class="btn btn-edit" (click)="startEdit(product)">Éditer</button>
+          <button *ngIf="editProductId === product.id" class="btn btn-edit" (click)="saveEdit()">Sauvegarder</button>
+          <button *ngIf="editProductId === product.id" class="btn btn-delete" (click)="cancelEdit()" style="background-color: grey;">Annuler</button>
+          <button *ngIf="editProductId !== product.id" class="btn btn-delete" (click)="deleteProduct(product.id)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
